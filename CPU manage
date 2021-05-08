@@ -1,0 +1,98 @@
+
+#Man page
+
+man cpufreq-set
+
+#############################################################################################
+
+sudo apt install cpufrequtils
+
+
+sudo apt install sysfsutils
+
+############################################################################################
+
+#CPU Info
+
+cat /proc/cpuinfo
+grep name /proc/cpuinfo
+sudo dmidecode -t processor  
+cpufreq-info
+grep -E '^(cpu family|model|stepping|microcode)' /proc/cpuinfo | sort -u
+journalctl -b -k | grep "microcode updated early to"
+cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_driver
+
+############################################################################################
+
+#Module name
+
+ls -1 /lib/modules/`uname -r`/kernel/drivers/cpufreq/
+
+#Choose modules
+
+ls -1 /lib/modules/`uname -r`/kernel/drivers/cpufreq/
+
+
+################################ !!!!!!!!!!!!!!!!!!!!!!!!!!!! #############################
+#Change modules
+
+sudo -s
+modprobe le_module_de_votre_processeur 
+modprobe cpufreq_conservative
+modprobe cpufreq_ondemand
+modprobe cpufreq_powersave
+modprobe cpufreq_stats
+modprobe cpufreq_userspace
+
+#Config file proc path
+
+#X is the number of the CPU go in repertory for see you can change all but carreful
+ 
+ /sys/devices/system/cpu/cpuX/cpufreq/
+
+############################################################################################
+
+
+exemple:
+
+cpufreq-info
+
+	##  if you want cpu0 in powersave mode
+	
+	sudo cpufreq-set -c 0 -g powersave
+	
+	## if you want cp1 performance mode but max frequency 3 GHz
+	
+	sudo cpufreq-set -c 1 -g performance -u 3000000
+	
+# More info here
+
+man cpufreq-set
+
+
+############################################################################################
+
+#Change parameters to permanant
+
+sudo vim /etc/init.d/cpufrequtils
+
+#modify
+
+GOVERNOR="ondemand"
+
+#replaced by
+
+GOVERNOR="powersave" #if you want powersave
+
+#In command line
+
+sudo sed -i 's/^GOVERNOR=.*/GOVERNOR="powersave"/' /etc/init.d/cpufrequtils
+
+
+
+
+
+
+
+
+
